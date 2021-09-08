@@ -1,0 +1,31 @@
+Sample_Size <- 100
+Lamba_MLE <-vector()
+
+for (j in 1:1000) {
+  Z <-vector()
+  Delta <- vector()
+  X <- rexp(Sample_Size,5)
+  Y <- rexp(Sample_Size,5)
+  for (i in 1:Sample_Size) {
+    Z[i] <- Y[i]
+    if (X[i]<=Y[i]) {
+      Delta[i] <- 1
+    }
+    if (X[i]>=Y[i]) {
+      Delta[i] <- 0
+    }
+  }
+  Lamba_zero <- 10
+  for (k in 1:10) {
+    f1 <- sum((1-Delta)*log(exp(-1*Lamba_zero*Z)))
+            +sum((Delta)*log(1-exp(-Lamba_zero*Z)))
+    f2 <- sum((Delta-1)*Z)+
+      sum((Delta)*Z*(exp(-Lamba_zero*Z))/(1-exp(-Lamba_zero*Z)))
+    Lamba_zero <-  Lamba_zero - f1/f2
+  }
+  Lamba_MLE[j] <-  Lamba_zero
+}
+
+Lamba_MLE_Sum <- sum(Lamba_MLE)/1000
+Bias <- 5 - Lamba_MLE_Sum
+SD <- sd(Lamba_MLE)
