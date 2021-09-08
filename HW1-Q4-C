@@ -1,0 +1,24 @@
+Sample_Size <- 100
+Lamba_MLE <-vector()
+
+for (j in 1:1000) {
+  Z <-vector()
+  Delta <- vector()
+  X <- rexp(Sample_Size,5)
+  Y <- rexp(Sample_Size,45)
+  for (i in 1:Sample_Size) {
+    if (X[i]<=Y[i]) {
+      Z[i] <- X[i]
+      Delta[i] <- 1
+    }
+    if (X[i]>=Y[i]) {
+      Z[i] <- Y[i]
+      Delta[i] <- 0
+    }
+  }
+  Lamba_MLE[j] <- sum(Delta)/sum(Z)
+}
+
+Lamba_MLE_Sum <- sum(Lamba_MLE)/1000
+Bias <- 5 - Lamba_MLE_Sum
+SD <- sd(Lamba_MLE)
