@@ -1,11 +1,11 @@
-Sample_Size <- 100
+Sample_Size <- 400
 Lamba_MLE <-vector()
 
 for (j in 1:1000) {
   Z <-vector()
   Delta <- vector()
   X <- rexp(Sample_Size,5)
-  Y <- rexp(Sample_Size,5)
+  Y <- rexp(Sample_Size,5/9)
   for (i in 1:Sample_Size) {
     Z[i] <- Y[i]
     if (X[i]<=Y[i]) {
@@ -15,11 +15,10 @@ for (j in 1:1000) {
       Delta[i] <- 0
     }
   }
-  Lamba_zero <- 10
+  Lamba_zero <- 3
   for (k in 1:10) {
-    f1 <- sum((1-Delta)*log(exp(-1*Lamba_zero*Z)))
-            +sum((Delta)*log(1-exp(-Lamba_zero*Z)))
-    f2 <- sum((Delta-1)*Z)+
+    f2 <- sum(-Delta*Z^2*exp(-Lamba_zero*Z)/(1-exp(-Lamba_zero*Z))^2)
+    f1 <- sum((Delta-1)*Z)+
       sum((Delta)*Z*(exp(-Lamba_zero*Z))/(1-exp(-Lamba_zero*Z)))
     Lamba_zero <-  Lamba_zero - f1/f2
   }
