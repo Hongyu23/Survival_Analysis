@@ -1,0 +1,44 @@
+#Install Package
+library("survival")
+library("survminer")
+
+#Data In Text
+setwd('/Users/dhyscuduke/Desktop')
+Lung = read.table('/Users/dhyscuduke/Desktop/lung.txt',
+                  row.name=NULL, col.name = c("time1",
+                  "death1", "time2", "death2"))
+
+#Survival Function
+fit <- survfit(Surv(time2, death2)~1, data = Lung, conf.type = 'log-log')
+print(fit)
+
+#Make a summary of the survival outcomes
+summary(fit)
+d <- data.frame(time = fit$time,
+                n.risk = fit$n.risk,
+                n.event = fit$n.event,
+                n.censor = fit$n.censor,
+                surv = fit$surv,
+                upper = fit$upper,
+                lower = fit$lower
+)
+
+#Plot the Kaplan-Meier Survival Curves
+plot(fit, lty=1:3, col=1:3, xlab="Time", ylab="Kaplan-Meier Estimates")
+
+#Plot the Kaplan-Meier Survival Curves with bands  [30, 300]
+plot(fit, lty=1:3, col=1:3, xlab="Time", ylab="Kaplan-Meier Estimates", 
+     xlim = c(30, 300))
+
+#Nelson-Aalen estimate of the cumulative hazard function and its 95% CI
+ggsurvplot(fit,
+           conf.int = TRUE,
+           risk.table.col = "strata", 
+           ggtheme = theme_bw(), 
+           palette = c("#E7B800", "#2E9FDF"),
+           fun = "cumhaz")
+
+#Plot the Median Survival Time
+plot(fit, lty=1:3, col=1:3, xlab="Time", ylab="Kaplan-Meier Estimates", 
+     xlim = c(30, 300))
+abline(h=0.5, col=2)
