@@ -93,16 +93,5 @@ surv_diff_2 <- survdiff(Surv(t2, d2)~Group, data = DATA)
 plot(fit1, lty=1:3, col=1:3, xlab="Time", ylab="Kaplan-Meier Estimates",
      ylim = c(0.2, 1))
 
-
-DATA_NEW1 <- DATA%>%filter(da=="1")
-#Log Rank Test
-surv_diff_3 <- survdiff(Surv(t2, d2)~Group, data = DATA_NEW1)
-
-
-DATA_NEW2 <- DATA%>%filter(da=="0")
-#Log Rank Test
-surv_diff_4 <- survdiff(Surv(t2, d2)~Group, data = DATA_NEW2)
-
-
-
-
+#Stratified Log-rank test
+surv_diff3 <- survdiff(Surv(t2, d2) ~ Group +strata(da), data =  DATA)
